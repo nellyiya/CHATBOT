@@ -9,6 +9,13 @@ This project develops an **agriculture-specific chatbot** to assist farmers by p
 
 
 
+## Dataset Cleaning
+The dataset has been cleaned by removing duplicates, handling missing values, standardizing text, and removing outliers.
+
+## Video Demo
+Watch the demo on YouTube: [https://youtu.be/Rn1yqRJSnzU](https://youtu.be/Rn1yqRJSnzU)
+
+
 ## Dataset Collection and Preprocessing
 - **Dataset:** [KisanVaani agriculture QA dataset](https://huggingface.co/datasets/KisanVaani/agriculture-qa-english-only)  
 - **Size:** 22,615 question-answer pairs  
