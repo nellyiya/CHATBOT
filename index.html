@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AgriChatbot Modern UI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600&display=swap" rel="stylesheet" />
+  <style>
+    body, html {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: linear-gradient(105deg, #e7fbe7, #f8fffa 75%);
+      color: #216c2a;
+      height: 100vh; width: 100vw; overflow: hidden;
+      transition: background 0.5s, color 0.4s;
+    }
+    body.dark-mode {
+      background: linear-gradient(105deg, #222, #374f37 75%);
+      color: #e7fbe7;
+    }
+    .main { display: flex; height: 100vh; }
+    .sidebar {
+      width: 80px; background: #fcfcfc;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 22px 0 0 0;
+      box-shadow: 0 0 30px #dbead6;
+      gap: 25px;
+      transition: background 0.5s;
+    }
+    .sidebar.dark-mode { background: #2e2e2e; }
+    .icon-btn {
+      background: #e7fbe7; border: none; border-radius: 50%;
+      width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin-bottom: 5px; cursor: pointer; color: #388e3c;
+      transition: box-shadow 0.22s, background 0.22s, color 0.22s;
+      box-shadow: 0 4px 12px #a5d6a740;
+      outline: none;
+    }
+    .icon-btn:focus { outline: 2px solid #388e3c; }
+    .icon-btn:hover { background: #a5d6a7; color: #216c2a; box-shadow: 0 6px 20px #81c78433; }
+    body.dark-mode .icon-btn { background: #374f37; color: #e7fbe7; }
+    .chat-panel {
+      flex: 1; display: flex; flex-direction: column; justify-content: space-between; background: #fff;
+      transition: background 0.5s, color 0.3s;
+    }
+    body.dark-mode .chat-panel { background: #232f23; color: #e7fbe7; }
+    .chat-header-bar {
+      padding: 28px 32px 5px 32px; font-size: 22px; font-weight: 600; color: #216c2a; user-select: none; letter-spacing: 0.5px;
+    }
+    body.dark-mode .chat-header-bar { color: #a5d6a7; }
+    .chat-body {
+      padding: 16px 36px 0 36px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px;
+    }
+    .bubble {
+      padding: 13px 22px; border-radius: 17px; font-size: 16px; font-weight: 500; margin-bottom: 8px; max-width: 540px;
+      box-shadow: 0 2px 10px #d4eac7; word-break: break-word;
+    }
+    .bubble.bot {
+      align-self: flex-start; background-color: #e7fbe7; color: #216c2a; border: 1.5px solid #a5d6a7;
+      display:flex; align-items:center; gap:8px;
+    }
+    .bubble.user {
+      align-self: flex-end; background-color: #cafabf; color: #124e1e; border: 1.5px solid #98db9e;
+      display:flex; align-items:center; gap:8px; flex-direction: row-reverse;
+    }
+    body.dark-mode .bubble.bot { background: #374f37; color: #a5d6a7; border-color: #a5d6a7 }
+    body.dark-mode .bubble.user { background: #433; color: #cfdadc; border-color: #81c784 }
+    .chat-input-bar { display: flex; align-items: center; padding: 16px 32px; background: #fff; border-top: 1.5px solid #e7fbe7; }
+    body.dark-mode .chat-input-bar { background: #222; }
+    .chat-input-bar input { flex: 1; font-size: 15px; padding: 15px 18px; border-radius: 18px; border: 2px solid #a5d6a7; outline: none; margin-right: 12px;}
+    .chat-input-bar button { font-size: 17px; background: #388e3c; color: #fff; border: none; border-radius: 14px; padding: 13px 27px; font-weight: 600; cursor: pointer; transition: background 0.22s;}
+    .chat-input-bar button:hover { background: #216c2a; }
+    body.dark-mode .chat-input-bar input { background: #333; color: #e7fbe7; border-color: #81c784; }
+    body.dark-mode .chat-input-bar button { background: #81c784; color: #232f23; }
+    .modal-bg {
+      position: fixed; left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(44, 67, 44, 0.12); z-index: 2000; display: flex; align-items: center; justify-content: center;
+    }
+    .modal {
+      background: #fff; color: #216c2a; min-width: 230px; padding:20px 25px; border-radius: 10px; box-shadow: 0 8px 30px #a5d6a740; font-size: 16px; font-weight: 500;
+      display: flex; flex-direction: column; align-items: center; gap: 19px;
+    }
+    .modal.dark-mode { background: #374f37; color: #f4ffed; }
+    .close-btn { margin-top:12px; background: #388e3c; color:#fff; border:none; border-radius:6px; font-size:15px; font-weight:600; padding: 7px 18px; cursor:pointer; }
+    .close-btn:hover { background: #216c2a; }
+    .lang-btn { margin: 4px 7px 0px 7px; background:#f1f8ef; border: 1.6px solid #a5d6a7; border-radius:7px; padding: 7px 16px; cursor:pointer; color: #216c2a; font-weight:600; }
+    .lang-btn.selected { background: #a5d6a7; color: #fff;}
+    .lang-btn:hover { background: #d1ebce;}
+    body.dark-mode .lang-btn { background:#333; color:#f4ffed; border-color:#81c784; }
+    body.dark-mode .lang-btn.selected{ background: #81c784; color: #22452c;}
+    body.dark-mode .lang-btn:hover{ background: #666;}
+  </style>
+</head>
+<body>
+  <div class="main">
+    <div class="sidebar" id="sidebar">
+      <button class="icon-btn" title="Change Language" onclick="showModal('language')">🌐</button>
+      <button id="toggleMode" class="icon-btn" title="Switch mode" onclick="toggleMode()">🌙</button>
+      <button class="icon-btn" title="Settings" onclick="showModal('settings')">⚙️</button>
+      <button class="icon-btn" title="Profile" onclick="showModal('profile')">👤</button>
+    </div>
+    <div class="chat-panel">
+      <div class="chat-header-bar">
+        AgriChatbot Support
+      </div>
+      <div id="chat-body" class="chat-body">
+        <div id="intro-msg" class="bubble bot">
+          <span>🤖</span>
+          Hello! I am AgriChatbot, your assistant for all things farming.<br>
+          I can answer your questions about crops, soil health, pest management, and smart farming techniques.<br>
+          Get real-time advice, tips, weather updates, and best practices.<br>
+          Type your question below to get started!
+        </div>
+      </div>
+      <form class="chat-input-bar" onsubmit="sendMessage(event)">
+        <input id="userInput" type="text" placeholder="Type your message..." autocomplete="off" />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div id="modalBg" style="display:none;" class="modal-bg" onclick="hideModal(event)">
+    <div id="modal" class="modal"></div>
+  </div>
+  <script>
+    let mode = "light";
+    let introTranslations = {
+      "English": `
+        <span>🤖</span>
+        Hello! I am AgriChatbot, your assistant for all things farming.<br>
+        I can answer your questions about crops, soil health, pest management, and smart farming techniques.<br>
+        Get real-time advice, tips, weather updates, and best practices.<br>
+        Type your question below to get started!
+      `,
+      "French": `
+        <span>🤖</span>
+        Bonjour! Je suis AgriChatbot, votre assistant pour tout ce qui concerne l'agriculture.<br>
+        Je peux répondre à vos questions sur les cultures, la santé des sols, la gestion des ravageurs et les techniques agricoles intelligentes.<br>
+        Obtenez des conseils, des astuces, des prévisions météo et les meilleures pratiques en temps réel.<br>
+        Écrivez votre question ci-dessous pour commencer!
+      `,
+      "Swahili": `
+        <span>🤖</span>
+        Habari! Mimi ni AgriChatbot, msaidizi wako kwa mambo yote ya kilimo.<br>
+        Naweza kujibu maswali kuhusu mazao, afya ya udongo, wadudu waharibifu, na mbinu bora za kilimo.<br>
+        Pata ushauri wa papo hapo, vidokezo, taarifa za hali ya hewa, na mbinu bora.<br>
+        Andika swali lako hapo chini kuanza!
+      `
+    };
+    let currentLang = "English";
+    function showModal(type) {
+      const modalBg = document.getElementById('modalBg');
+      const modal = document.getElementById('modal');
+      modal.classList.toggle('dark-mode', document.body.classList.contains('dark-mode'));
+      let html = '';
+      if(type === 'language'){
+        html = `<div>🌐 <b>Select Language</b><div>
+          <button class="lang-btn ${currentLang=='English'?'selected':''}" onclick="setLang('English')">English</button>
+          <button class="lang-btn ${currentLang=='French'?'selected':''}" onclick="setLang('French')">French</button>
+          <button class="lang-btn ${currentLang=='Swahili'?'selected':''}" onclick="setLang('Swahili')">Swahili</button>
+        </div></div>`;
+      } else if(type === 'settings'){
+        html = `<div>⚙️ <b>Settings</b><br>Adjust your preferences here.</div>`;
+      } else if(type === 'profile'){
+        html = `<div>👤 <b>Your Profile</b><br>Welcome, Farmer! Update your info soon.</div>`;
+      }
+      html += `<button class="close-btn" onclick="hideModal(event)">Close</button>`;
+      modal.innerHTML = html;
+      modalBg.style.display = "flex";
+    }
+    function hideModal(event) {
+      if(event.target.id === 'modalBg' || event.target.className === 'close-btn') {
+        document.getElementById('modalBg').style.display = "none";
+      }
+    }
+    function setLang(lang) {
+      currentLang = lang;
+      document.getElementById('intro-msg').innerHTML = introTranslations[lang];
+      hideModal({target:{className:'close-btn'}});
+    }
+    function toggleMode() {
+      const body = document.body;
+      const sidebar = document.getElementById('sidebar');
+      body.classList.toggle('dark-mode');
+      sidebar.classList.toggle('dark-mode');
+      // Toggle icon as well
+      let btn = document.getElementById('toggleMode');
+      if(body.classList.contains('dark-mode')) {
+        btn.innerText = '☀️';
+        btn.title = "Light mode";
+        mode = "dark";
+      } else {
+        btn.innerText = '🌙';
+        btn.title = "Dark mode";
+        mode = "light";
+      }
+    }
+    async function sendMessage(event) {
+      event.preventDefault();
+      const input = document.getElementById('userInput');
+      const text = input.value.trim();
+      if (!text) return;
+      const chatBody = document.getElementById('chat-body');
+
+      // User bubble
+      const userDiv = document.createElement('div');
+      userDiv.className = 'bubble user';
+      userDiv.innerHTML = '<span>🧑</span>' + text;
+      chatBody.appendChild(userDiv);
+      chatBody.scrollTop = chatBody.scrollHeight;
+      input.value = '';
+
+      // Call backend API
+      try {
+        const response = await fetch('http://localhost:5000/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text }),
+        });
+        const data = await response.json();
+        const botDiv = document.createElement('div');
+        botDiv.className = 'bubble bot';
+        botDiv.innerHTML = `<span>🤖</span> ${data.response}`;
+        chatBody.appendChild(botDiv);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      } catch (error) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'bubble bot';
+        errorDiv.innerHTML = '<span>🤖</span> Sorry, an error occurred. Please try again later.';
+        chatBody.appendChild(errorDiv);
+        chatBody.scrollTop = chatBody.scrollHeight;
+        console.error('Error:', error);
+      }
+    }
+  </script>
+</body>
+</html>
