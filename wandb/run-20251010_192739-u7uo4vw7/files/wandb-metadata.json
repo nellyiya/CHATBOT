@@ -1,0 +1,24 @@
+{
+  "os": "Windows-11-10.0.22631-SP0",
+  "python": "CPython 3.12.4",
+  "startedAt": "2025-10-10T17:27:39.021383Z",
+  "program": "c:\\Users\\Djafari\\Videos\\CHATBOT summative\\Notebook.ipynb",
+  "codePath": "Notebook.ipynb",
+  "codePathLocal": "Notebook.ipynb",
+  "email": "n.iyabikoze@alustudent.com",
+  "root": "c:\\Users\\Djafari\\Videos\\CHATBOT summative",
+  "host": "DESKTOP-Q6D7QPL",
+  "executable": "c:\\Users\\Djafari\\hf_env\\Scripts\\python.exe",
+  "cpu_count": 8,
+  "cpu_count_logical": 16,
+  "disk": {
+    "/": {
+      "total": "264643801088",
+      "used": "227101605888"
+    }
+  },
+  "memory": {
+    "total": "16458280960"
+  },
+  "writerId": "km4bor4b2ptca553bktgcn9au24rrzle"
+}
