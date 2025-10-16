@@ -1,0 +1,2 @@
+agri_chatbot_t5/*.h5 filter=lfs diff=lfs merge=lfs -text
+agri_chatbot_t5/*.bin filter=lfs diff=lfs merge=lfs -text
